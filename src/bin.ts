@@ -2,9 +2,9 @@
 import minimist = require('minimist');
 import stdin = require('get-stdin');
 import {json2ts} from './';
-import {fromJS, OrderedSet} from 'immutable';
-import {join, parse, ParsedPath} from "path";
-import {existsSync, readFile, readFileSync} from "fs";
+import {OrderedSet} from 'immutable';
+import {join, parse, ParsedPath, resolve} from 'path';
+import {existsSync, readFileSync} from "fs";
 const argv = minimist(process.argv.slice(2));
 
 // unique input
@@ -98,7 +98,7 @@ interface IResolvedInput {
 }
 
 function resolveInput(incoming: IIncomingInput, cwd): IResolvedInput {
-    const absolute = join(cwd, incoming.parsed.dir, incoming.parsed.base)
+    const absolute = resolve(cwd, join(incoming.parsed.dir, incoming.parsed.base));
     if (!existsSync(absolute)) {
         return {
             errors: [{
