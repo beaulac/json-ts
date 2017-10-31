@@ -199,20 +199,22 @@ export function transform(stack: ParsedNode[], options: JsonTsOptions): Interfac
 
             return item;
         } else {
-            console.log('Not creating union as this array contains mixed complexr types');
+            console.log('Not creating union as this array contains mixed complex types');
         }
 
         return ts.createNode(ts.SyntaxKind.AnyKeyword);
     }
     function newInterfaceName(node: ParsedNode) {
-        const base = node.name[0].toUpperCase() + node.name.slice(1);
+        const base = upper(node.name);
         if (options.prefix) {
             return options.prefix + base;
         }
         return base;
     }
     function upper(string) {
-        return string[0].toUpperCase() + string.slice(1);
+        return (string.length > 0)
+            ? string[0].toUpperCase() + string.slice(1)
+            : string;
     }
     function pascalCase(input): string {
         return startCase(toLower(input)).replace(/ /g, '');

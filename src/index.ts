@@ -15,14 +15,21 @@ export const defaults = {
 };
 
 export function json2ts(validJsonString: string, options: JsonTsOptions = {}): string {
-    const merged = {
+    const merged = checkOptions({
         ...defaults,
         ...options
-    };
+    });
     const parsed = parse(validJsonString, merged);
     const transformed = transform(parsed, merged);
     const printed = print(transformed, merged);
     return printed;
+}
+
+function checkOptions(options) {
+    if (options.prefix || options.rootName) {
+        return options;
+    }
+    throw Error('prefix and rootName cannot both be empty!');
 }
 
 export {
